@@ -1,7 +1,5 @@
 package com.bank.model;
 
-
-
 public class BankTransaction {
 
   private BankTransactionType type;

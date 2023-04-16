@@ -15,18 +15,14 @@ import com.bank.model.BankTransaction;
 import com.bank.model.BankTransactionType;
 import com.bank.model.Currency;
 
+@ApplicationScoped
 public class Bank1AccountSourceAdapter implements BankAccountSourceAdapter {
-
-  private Bank1AccountSource source;
-
-  public Bank1AccountSourceAdapter() {
-    /*
-     * In a real world scenario, this would been injected using dependency injection.
-     * Since I didn't want to change the proposed class I'm instantiating in the constructor
-     * for demonstration purposes
-     */
-    this.source = new Bank1AccountSource();
-  }
+  /*
+  * In a real world scenario, this would been injected using dependency injection.
+  * Since I didn't want to change the proposed class I'm instantiating in the constructor
+  * for demonstration purposes
+  */
+  private Bank1AccountSource source = new Bank1AccountSource();;
 
   @Override
   public String getSourceName() {

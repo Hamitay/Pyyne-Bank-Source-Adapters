@@ -1,9 +1,9 @@
 package com.bank.exceptions;
 
-public class UnsupportedCurrencyException extends Exception {
+public class UnsupportedCurrencyException extends ApiException {
 
   public UnsupportedCurrencyException(String currency) {
-    super(String.format("Unsupported currency %s", currency));
+    super(String.format("Unsupported currency %s", currency), 500);
   }
   
 }

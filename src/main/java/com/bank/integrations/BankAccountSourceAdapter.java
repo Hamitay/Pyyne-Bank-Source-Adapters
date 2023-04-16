@@ -18,6 +18,8 @@ public interface BankAccountSourceAdapter {
   
   /*
    * Returns a BankAccount converted from the source domain BankAccount type
+   * Fetches the account using the accountId and filters the transactions in a time windown
+   * bounded by transactionsFromDate and transactionsToDate
    */
   public BankAccount getBankAccount(long accountId,  Date transactionsFromDate, Date transactionsToDate);
 

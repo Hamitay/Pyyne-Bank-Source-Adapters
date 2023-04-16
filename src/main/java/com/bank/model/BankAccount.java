@@ -4,7 +4,7 @@ import java.util.List;
 
 public class BankAccount {
   
-  // Monetary value should always be integers to avoid floating point uncertainty
+  // Monetary values should always be integers to avoid floating point uncertainty
   private Integer balanceInCents;
 
   private Currency currency;

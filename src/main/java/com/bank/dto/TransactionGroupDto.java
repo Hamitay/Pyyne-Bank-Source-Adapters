@@ -4,6 +4,9 @@ import java.util.List;
 
 import com.bank.model.BankTransaction;
 
+/**
+ * DTO representing a a list of transactions grouped for a given bank account source
+ */
 public class TransactionGroupDto {
   private String bankAccountSource;
 
