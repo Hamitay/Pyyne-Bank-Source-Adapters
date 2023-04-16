@@ -1,5 +1,6 @@
 package com.bank.service;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class BankService {
       .toList();
   }
 
-  public AccountTransactionsDto getBankTransactions(long accountId, Date fromDate, Date toDate) {
+  public AccountTransactionsDto getBankTransactions(long accountId, LocalDate fromDate, LocalDate toDate) {
     List<TransactionGroupDto> x =  getAdapters()
     .stream()
     .map(adapter -> {

@@ -1,6 +1,8 @@
 package com.bank.integrations.bank1;
 
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
@@ -30,12 +32,15 @@ public class Bank1AccountSourceAdapter implements BankAccountSourceAdapter {
   }
 
   @Override
-  public BankAccount getBankAccount(long accountId, Date transactionsFromDate, Date transactionsToDate) {
+  public BankAccount getBankAccount(long accountId, LocalDate transactionsFromDate, LocalDate transactionsToDate) {
 
     Integer balanceInCents = source.getAccountBalance(accountId).intValue() * 100;
     Currency currency = Currency.valueOf(source.getAccountCurrency(accountId));
 
-    List<BankTransaction> transactions = source.getTransactions(accountId, transactionsFromDate, transactionsToDate)
+    Date fromDate = transactionsFromDate != null ? Date.from(transactionsFromDate.atStartOfDay(ZoneId.systemDefault()).toInstant()) : null;
+    Date toDate = transactionsFromDate != null ? Date.from(transactionsToDate.atStartOfDay(ZoneId.systemDefault()).toInstant()) : null;    
+
+    List<BankTransaction> transactions = source.getTransactions(accountId, fromDate, toDate)
       .stream()
       .map(this::convertTransaction)
       .toList();

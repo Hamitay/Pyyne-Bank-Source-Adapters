@@ -1,6 +1,6 @@
 package com.bank.integrations;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import com.bank.model.BankAccount;
 
@@ -21,6 +21,6 @@ public interface BankAccountSourceAdapter {
    * Fetches the account using the accountId and filters the transactions in a time windown
    * bounded by transactionsFromDate and transactionsToDate
    */
-  public BankAccount getBankAccount(long accountId,  Date transactionsFromDate, Date transactionsToDate);
+  public BankAccount getBankAccount(long accountId,  LocalDate transactionsFromDate, LocalDate transactionsToDate);
 
 }

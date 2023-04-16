@@ -1,10 +1,14 @@
 package com.bank.controller;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 import org.jboss.logmanager.Logger;
@@ -28,35 +32,37 @@ public class BankController {
     BankService bankService;
 
     @GET
-    @Path("/balances/{account}")
-    public Response printBalances(String account) {
-        LOG.info(String.format("Received request to print balances for account %s", account));
+    @Path("/balances/{accountId}")
+    public Response printBalances(Long accountId) {
+        LOG.info(String.format("Received request to print balances for account %s", accountId));
 
         try {
-            Long accountId = Long.parseLong(account);
             List<AccountBalanceDto> balances = bankService.getBankBalances(accountId);
 
             return Response.ok(balances).build();
         } 
         catch (Exception e) {
-            LOG.severe(String.format("Error printing balances for account %s", account));
+            LOG.severe(String.format("Error printing balances for account %s", accountId));
             e.printStackTrace();
             return Response.serverError().build();
         }
     }
 
     @GET()
-    @Path("/transactions/{account}")
-    public Response printTransactions(String account) {
-        LOG.info(String.format("Received request to print transactions for account %s", account));
+    @Path("/transactions/{accountId}")
+    public Response printTransactions(
+        Long accountId, 
+        @QueryParam("fromDate") LocalDate fromDate, 
+        @QueryParam("toDate") LocalDate toDate
+    ) {
+        LOG.info(String.format("Received request to print transactions for account %s", accountId));
 
         try {
-            Long accountId = Long.parseLong(account);
-            AccountTransactionsDto accountTransactions = bankService.getBankTransactions(accountId, null, null);
+            AccountTransactionsDto accountTransactions = bankService.getBankTransactions(accountId, fromDate, toDate);
             
             return Response.ok(accountTransactions).build();
         } catch (Exception e) {
-            LOG.severe(String.format("Error printing transactions for account %s", account));
+            LOG.severe(String.format("Error printing transactions for account %s", accountId));
             e.printStackTrace();
             return Response.serverError().build();
         }
