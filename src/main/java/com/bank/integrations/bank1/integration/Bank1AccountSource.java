@@ -4,9 +4,12 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import javax.enterprise.context.ApplicationScoped;
+
 /**
  * Created by Par Renyard on 5/12/21.
  */
+@ApplicationScoped
 public class Bank1AccountSource {
 
     public Double getAccountBalance(long accountId) {

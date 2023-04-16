@@ -1,8 +1,6 @@
 package com.bank.controller;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -15,6 +13,7 @@ import org.jboss.logmanager.Logger;
 
 import com.bank.dto.AccountBalanceDto;
 import com.bank.dto.AccountTransactionsDto;
+import com.bank.exceptions.ApiException;
 import com.bank.service.BankService;
 
 /**
@@ -40,7 +39,11 @@ public class BankController {
             List<AccountBalanceDto> balances = bankService.getBankBalances(accountId);
 
             return Response.ok(balances).build();
-        } 
+        }
+        catch (ApiException e) {
+            // ApiExceptions are handled in the ExceptionMapper
+            throw e;
+        }
         catch (Exception e) {
             LOG.severe(String.format("Error printing balances for account %s", accountId));
             e.printStackTrace();
@@ -61,6 +64,10 @@ public class BankController {
             AccountTransactionsDto accountTransactions = bankService.getBankTransactions(accountId, fromDate, toDate);
             
             return Response.ok(accountTransactions).build();
+        }
+        catch (ApiException e) {
+            // ApiExceptions are handled in the ExceptionMapper
+            throw e;
         } catch (Exception e) {
             LOG.severe(String.format("Error printing transactions for account %s", accountId));
             e.printStackTrace();

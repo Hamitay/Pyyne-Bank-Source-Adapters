@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+
 
 import com.bank.exceptions.UnsupportedTransactionException;
 import com.bank.integrations.BankAccountSourceAdapter;
@@ -19,12 +21,9 @@ import com.bank.model.Currency;
 
 @ApplicationScoped
 public class Bank1AccountSourceAdapter implements BankAccountSourceAdapter {
-  /*
-  * In a real world scenario, this would been injected using dependency injection.
-  * Since I didn't want to change the proposed class I'm instantiating in the constructor
-  * for demonstration purposes
-  */
-  private Bank1AccountSource source = new Bank1AccountSource();;
+  
+  @Inject
+  private Bank1AccountSource source;
 
   @Override
   public String getSourceName() {
@@ -34,9 +33,10 @@ public class Bank1AccountSourceAdapter implements BankAccountSourceAdapter {
   @Override
   public BankAccount getBankAccount(long accountId, LocalDate transactionsFromDate, LocalDate transactionsToDate) {
 
-    Integer balanceInCents = source.getAccountBalance(accountId).intValue() * 100;
+    Integer balanceInCents = (int)(source.getAccountBalance(accountId) * 100);
     Currency currency = Currency.valueOf(source.getAccountCurrency(accountId));
 
+    // Assumes that the source accepts null values for the date filters
     Date fromDate = transactionsFromDate != null ? Date.from(transactionsFromDate.atStartOfDay(ZoneId.systemDefault()).toInstant()) : null;
     Date toDate = transactionsFromDate != null ? Date.from(transactionsToDate.atStartOfDay(ZoneId.systemDefault()).toInstant()) : null;    
 
@@ -49,7 +49,7 @@ public class Bank1AccountSourceAdapter implements BankAccountSourceAdapter {
   }
   
   private BankTransaction convertTransaction(Bank1Transaction transaction) {
-    Integer balanceInCents = (int)transaction.getAmount() * 100;
+    Integer balanceInCents = (int)(transaction.getAmount() * 100);
     BankTransactionType type = convertTransactionType(transaction.getType());
 
     return new BankTransaction(type, balanceInCents, transaction.getText());

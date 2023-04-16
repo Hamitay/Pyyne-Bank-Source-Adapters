@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 import com.bank.exceptions.UnsupportedTransactionException;
 import com.bank.integrations.BankAccountSourceAdapter;
@@ -20,13 +21,10 @@ import com.bank.model.Currency;
 
 @ApplicationScoped
 public class Bank2AccountSourceAdapter implements BankAccountSourceAdapter{
-  /*
-  * In a real world scenario, this would been injected using dependency injection.
-  * Since I didn't want to change the proposed class I'm instantiating in the constructor
-  * for demonstration purposes
-  */
-  private Bank2AccountSource source = new Bank2AccountSource();
 
+  @Inject
+  private Bank2AccountSource source;
+  
   @Override
   public String getSourceName() {
     return "Bank 2";
@@ -37,9 +35,10 @@ public class Bank2AccountSourceAdapter implements BankAccountSourceAdapter{
 
       Bank2AccountBalance balance = source.getBalance(accountId);
 
-      Integer balanceInCents = (int) balance.getBalance() * 100;
+      Integer balanceInCents = (int)(balance.getBalance() * 100);
       Currency currency = Currency.valueOf(balance.getCurrency());
 
+      // Assumes that the source accepts null values for the date filters
       Date fromDate = transactionsFromDate != null ? Date.from(transactionsFromDate.atStartOfDay(ZoneId.systemDefault()).toInstant()) : null;
       Date toDate = transactionsFromDate != null ? Date.from(transactionsToDate.atStartOfDay(ZoneId.systemDefault()).toInstant()) : null;      
 
